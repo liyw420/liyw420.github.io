@@ -19,184 +19,185 @@ code: "https://github.com/liyw420/GC-4DGS"
         <h2>Demo Videos with Sparse Input Views</h2>
         <div class="content has-text-justified">
 
-<!-- 第一个对比：RGB -->
-<div class="comparison-container" style="width:800px;height:450px">
-  <img class="gif1" src="/video/gc4dgs_rgb.gif">
-  <img class="gif2" src="/video/4dgaussians_rgb.gif">
+<!-- 对比容器 -->
+<div class="comparison-container fixed-size">
+  <img src="/video/gc4dgs_rgb.gif">
+  <img src="/video/4dgaussians_rgb.gif">
   <div class="label left">4DGaussians RGB (CVPR'24)</div>
   <div class="label right">GC-4DGS RGB (Ours)</div>
-  <div class="slider"></div>
 </div>
 
-<!-- 第二个对比：Depth -->
-<div class="comparison-container" style="width:800px;height:450px">
-  <img class="gif1" src="/video/gc4dgs_depth.gif">
-  <img class="gif2" src="/video/4dgaussians_depth.gif">
+<div class="comparison-container fixed-size">
+  <img src="/video/gc4dgs_depth.gif">
+  <img src="/video/4dgaussians_depth.gif">
   <div class="label left">4DGaussians Depth (CVPR'24)</div>
   <div class="label right">GC-4DGS Depth (Ours)</div>
-  <div class="slider"></div>
 </div>
 
-<!-- 第三个对比：RGB Additional -->
 <div class="comparison-container auto-size">
-  <img class="gif1" src="/video/gc4dgs_rgb_add.gif" onload="adjustContainerSize(this)">
-  <img class="gif2" src="/video/4dgs_rgb_add.gif" onload="adjustContainerSize(this)">
+  <img src="/video/gc4dgs_rgb_add.gif" onload="adjustContainer(this)">
+  <img src="/video/4dgs_rgb_add.gif">
   <div class="label left">4DGS RGB (ICLR'24)</div>
   <div class="label right">GC-4DGS RGB (Ours)</div>
-  <div class="slider"></div>
 </div>
 
-<!-- 第四个对比：Depth Additional -->
 <div class="comparison-container auto-size">
-  <img class="gif1" src="/video/gc4dgs_depth_add.gif" onload="adjustContainerSize(this)">
-  <img class="gif2" src="/video/4dgs_depth_add.gif" onload="adjustContainerSize(this)">
+  <img src="/video/gc4dgs_depth_add.gif" onload="adjustContainer(this)">
+  <img src="/video/4dgs_depth_add.gif">
   <div class="label left">4DGS Depth (ICLR'24)</div>
   <div class="label right">GC-4DGS Depth (Ours)</div>
-  <div class="slider"></div>
 </div>
 
 <script>
-// 调整容器大小函数
-function adjustContainerSize(img) {
-  const container = img.parentElement;
-  if (img.complete && img.naturalWidth > 0) {
-    const maxWidth = 800; // 限制最大宽度与1-2相同
+const FIXED_WIDTH = 800;
+const FIXED_HEIGHT = 450;
+
+function adjustContainer(img) {
+    const container = img.parentElement;
+    if (!img.complete || img.naturalWidth === 0) return;
+    
     let width = img.naturalWidth;
     let height = img.naturalHeight;
     
-    // 如果宽度超过限制，按比例缩放
-    if (width > maxWidth) {
-      const ratio = maxWidth / width;
-      width = Math.floor(width * ratio);
-      height = Math.floor(height * ratio);
+    // 保持原图宽高比，但确保宽度不小于固定尺寸
+    if (width < FIXED_WIDTH) {
+        const ratio = FIXED_WIDTH / width;
+        width = FIXED_WIDTH;
+        height = Math.floor(height * ratio);
     }
     
     container.style.width = width + 'px';
     container.style.height = height + 'px';
-    container.querySelector('.slider').style.height = height + 'px';
-  }
 }
 
-// 事件监听
+// 统一事件处理
 document.querySelectorAll('.comparison-container').forEach(container => {
-  const slider = container.querySelector('.slider');
-  const gif2 = container.querySelector('.gif2');
-  
-  container.addEventListener('mousemove', e => {
-    const rect = container.getBoundingClientRect();
-    let x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-    slider.style.left = x + 'px';
-    gif2.style.clipPath = `inset(0 ${100 - (x / rect.width * 100)}% 0 0)`;
-  });
-  
-  container.addEventListener('mousedown', e => {
-    const rect = container.getBoundingClientRect();
-    let x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-    slider.style.left = x + 'px';
-    gif2.style.clipPath = `inset(0 ${100 - (x / rect.width * 100)}% 0 0)`;
-  });
+    const imgs = container.querySelectorAll('img');
+    const slider = document.createElement('div');
+    slider.className = 'slider';
+    container.appendChild(slider);
+    
+    // 设置第二张图的初始裁剪
+    if (imgs[1]) {
+        imgs[1].style.clipPath = 'inset(0 50% 0 0)';
+    }
+    
+    // 设置滑块初始高度
+    setTimeout(() => {
+        slider.style.height = container.offsetHeight + 'px';
+    }, 0);
+    
+    container.addEventListener('mousemove', handleInteraction);
+    container.addEventListener('mousedown', handleInteraction);
 });
 
-// 页面加载后检查图片尺寸
-window.addEventListener('load', () => {
-  document.querySelectorAll('.auto-size img').forEach(img => {
-    if (img.complete) adjustContainerSize(img);
-  });
-});
+function handleInteraction(e) {
+    const container = e.currentTarget;
+    const rect = container.getBoundingClientRect();
+    const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+    const slider = container.querySelector('.slider');
+    const afterImg = container.querySelectorAll('img')[1];
+    
+    slider.style.left = x + 'px';
+    afterImg.style.clipPath = `inset(0 ${rect.width - x}px 0 0)`;
+}
 </script>
 
 <style>
 .comparison-container {
-  position: relative;
-  margin: 30px auto;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  cursor: ew-resize;
+    position: relative;
+    margin: 30px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    cursor: ew-resize;
+}
+
+.fixed-size {
+    width: 800px;
+    height: 450px;
+}
+
+.auto-size {
+    max-width: 800px; /* 限制最大宽度 */
 }
 
 .comparison-container img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .auto-size img {
-  width: auto;
-  height: auto;
-  object-fit: contain;
-}
-
-.gif2 {
-  clip-path: inset(0 50% 0 0);
+    object-fit: contain;
 }
 
 .label {
-  position: absolute;
-  bottom: 15px;
-  z-index: 5;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-family: Arial;
-  font-size: 14px;
-  font-weight: 600;
-  backdrop-filter: blur(5px);
+    position: absolute;
+    bottom: 15px;
+    z-index: 5;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: Arial;
+    font-size: 14px;
+    font-weight: 600;
+    backdrop-filter: blur(5px);
 }
 
 .label.left {
-  left: 15px;
-  background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
-  border: 1px solid rgba(255,255,255,0.1);
+    left: 15px;
+    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .label.right {
-  right: 15px;
-  background: linear-gradient(135deg, rgba(74,144,226,0.9), rgba(58,123,213,0.8));
-  border: 1px solid rgba(255,255,255,0.2);
+    right: 15px;
+    background: linear-gradient(135deg, rgba(74,144,226,0.9), rgba(58,123,213,0.8));
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 .slider {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 4px;
-  height: 100%;
-  background: rgba(255,255,255,0.9);
-  z-index: 10;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.1s ease;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 4px;
+    height: 100%;
+    background: rgba(255,255,255,0.9);
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s ease;
 }
 
 .slider::before {
-  content: '';
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.95);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  border: 2px solid rgba(255,255,255,0.8);
+    content: '';
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.8);
 }
 
 .slider::after {
-  content: '';
-  width: 6px;
-  height: 6px;
-  background: rgba(100,100,100,0.6);
-  border-radius: 50%;
-  position: absolute;
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: rgba(100,100,100,0.6);
+    border-radius: 50%;
+    position: absolute;
 }
 
 .slider:hover::before {
-  transform: scale(1.1);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
 </style>
 
