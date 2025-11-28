@@ -17,6 +17,13 @@
 # Build settings
 markdown: kramdown
 
+# 确保包含视频文件类型
+include:
+  - "*.mp4"
+  - "*.mov"
+  - "*.avi"
+  - video
+
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
