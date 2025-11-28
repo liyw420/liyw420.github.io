@@ -15,14 +15,16 @@
 # in the templates via {{ site.myvariable }}.
 
 # Build settings
-markdown: kramdown
 
-# 确保包含视频文件类型
-include:
-  - "*.mp4"
-  - "*.mov"
-  - "*.avi"
-  - video
+title: "您的项目名称"
+description: "项目描述"
+baseurl: "" # 如果部署在用户名.github.io，保持为空
+url: "https://gc4dgs.github.io" # 替换为您的实际URL
+theme: minima # 或者您使用的主题
+
+# 构建设置
+markdown: kramdown
+permalink: pretty
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
