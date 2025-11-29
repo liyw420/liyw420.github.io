@@ -93,52 +93,9 @@ document.querySelectorAll('.comparison-container').forEach(container => {
         slider.style.height = container.offsetHeight + 'px';
     }, 0);
     
-    // 直接监听鼠标移动事件，无需hover状态
-    let animationFrameId = null;
-    
+    // 直接监听鼠标移动事件 - 无需点击！
     container.addEventListener('mousemove', (e) => {
-        // 使用 requestAnimationFrame 优化性能
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-        }
-        
-        animationFrameId = requestAnimationFrame(() => {
-            handleInteraction(e);
-        });
-    });
-    
-    // 鼠标离开时清理
-    container.addEventListener('mouseleave', () => {
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
-    });
-    
-    // 保留点击拖动功能
-    container.addEventListener('mousedown', (e) => {
         handleInteraction(e);
-        
-        const handleMouseMove = (moveEvent) => {
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-            animationFrameId = requestAnimationFrame(() => {
-                handleInteraction(moveEvent);
-            });
-        };
-        
-        const handleMouseUp = () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            }
-        };
-        
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
     });
 });
 
@@ -149,7 +106,7 @@ function handleInteraction(e) {
     const slider = container.querySelector('.slider');
     const afterImg = container.querySelectorAll('img')[1];
     
-    // 确保滑块始终可见且样式正确
+    // 确保滑块始终可见
     slider.style.display = 'flex';
     slider.style.opacity = '1';
     slider.style.background = 'rgba(255,255,255,0.9)';
@@ -160,7 +117,7 @@ function handleInteraction(e) {
     slider.style.left = x + 'px';
     afterImg.style.clipPath = `inset(0 ${rect.width - x}px 0 0)`;
     
-    // 在下一帧恢复过渡效果（仅用于悬停效果）
+    // 在下一帧恢复过渡效果
     requestAnimationFrame(() => {
         slider.style.transition = 'all 0.1s ease';
     });
@@ -175,7 +132,7 @@ function handleInteraction(e) {
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     cursor: ew-resize;
-    user-select: none; /* 防止文本选择干扰 */
+    user-select: none;
 }
 
 .fixed-size {
@@ -184,7 +141,7 @@ function handleInteraction(e) {
 }
 
 .auto-size {
-    max-width: 800px; /* 限制最大宽度 */
+    max-width: 800px;
 }
 
 .comparison-container img {
@@ -192,7 +149,7 @@ function handleInteraction(e) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    pointer-events: none; /* 防止图片干扰事件 */
+    pointer-events: none;
 }
 
 .auto-size img {
@@ -237,9 +194,6 @@ function handleInteraction(e) {
     align-items: center;
     justify-content: center;
     transition: all 0.1s ease;
-    /* 确保滑块始终可见 */
-    opacity: 1 !important;
-    visibility: visible !important;
 }
 
 .slider::before {
@@ -268,12 +222,6 @@ function handleInteraction(e) {
 .slider:hover::before {
     transform: scale(1.1);
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-/* 确保滑块在交互时保持高可见性 */
-.comparison-container:hover .slider {
-    opacity: 1 !important;
-    background: rgba(255,255,255,0.9) !important;
 }
 </style>
 
