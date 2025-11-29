@@ -628,11 +628,3 @@ To further evaluate the deployability of GC-4DGS on resource-constrained edge de
 </div>
 
 ---
-<div class="columns is-centered has-text-centered">
-    <div class="column is-four-fifths">
-        <h2>Citation</h2>
-        <div class="content has-text-justified">
-
-</div>
-</div>
-</div>
