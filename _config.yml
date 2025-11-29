@@ -19,7 +19,7 @@
 title: "您的项目名称"
 description: "项目描述"
 baseurl: "" # 如果部署在用户名.github.io，保持为空
-url: "https://gc4dgs.github.io" # 替换为您的实际URL
+url: "https://liyw420.github.io" # 替换为您的实际URL
 theme: minima # 或者您使用的主题
 
 # 构建设置
