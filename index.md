@@ -68,6 +68,12 @@ function adjustContainer(img) {
     
     container.style.width = width + 'px';
     container.style.height = height + 'px';
+    
+    // 更新滑块高度
+    const slider = container.querySelector('.slider');
+    if (slider) {
+        slider.style.height = container.offsetHeight + 'px';
+    }
 }
 
 // 统一事件处理
@@ -87,8 +93,34 @@ document.querySelectorAll('.comparison-container').forEach(container => {
         slider.style.height = container.offsetHeight + 'px';
     }, 0);
     
-    container.addEventListener('mousemove', handleInteraction);
-    container.addEventListener('mousedown', handleInteraction);
+    // 添加拖动状态管理
+    let isDragging = false;
+    
+    // 鼠标按下事件
+    container.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        container.style.cursor = 'grabbing';
+        handleInteraction(e);
+    });
+    
+    // 鼠标移动事件
+    container.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            handleInteraction(e);
+        }
+    });
+    
+    // 鼠标释放事件
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        container.style.cursor = 'ew-resize';
+    });
+    
+    // 鼠标离开容器时停止拖动
+    container.addEventListener('mouseleave', () => {
+        isDragging = false;
+        container.style.cursor = 'ew-resize';
+    });
 });
 
 function handleInteraction(e) {
@@ -98,6 +130,8 @@ function handleInteraction(e) {
     const slider = container.querySelector('.slider');
     const afterImg = container.querySelectorAll('img')[1];
     
+    // 确保滑块始终可见
+    slider.style.display = 'flex';
     slider.style.left = x + 'px';
     afterImg.style.clipPath = `inset(0 ${rect.width - x}px 0 0)`;
 }
@@ -111,6 +145,7 @@ function handleInteraction(e) {
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     cursor: ew-resize;
+    user-select: none; /* 防止文本选择干扰 */
 }
 
 .fixed-size {
@@ -127,6 +162,7 @@ function handleInteraction(e) {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    pointer-events: none; /* 防止图片干扰事件 */
 }
 
 .auto-size img {
@@ -184,6 +220,7 @@ function handleInteraction(e) {
     justify-content: center;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     border: 2px solid rgba(255,255,255,0.8);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .slider::after {
