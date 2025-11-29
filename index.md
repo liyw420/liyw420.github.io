@@ -93,33 +93,11 @@ document.querySelectorAll('.comparison-container').forEach(container => {
         slider.style.height = container.offsetHeight + 'px';
     }, 0);
     
-    // 优化事件监听 - 使用 requestAnimationFrame 提高性能
-    let isHovering = false;
+    // 直接监听鼠标移动事件，无需hover状态
     let animationFrameId = null;
     
-    // 鼠标进入容器
-    container.addEventListener('mouseenter', () => {
-        isHovering = true;
-        // 确保滑块可见
-        const slider = container.querySelector('.slider');
-        slider.style.opacity = '1';
-        slider.style.background = 'rgba(255,255,255,0.9)';
-    });
-    
-    // 鼠标离开容器
-    container.addEventListener('mouseleave', () => {
-        isHovering = false;
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
-    });
-    
-    // 鼠标移动事件 - 使用节流优化性能
     container.addEventListener('mousemove', (e) => {
-        if (!isHovering) return;
-        
-        // 使用 requestAnimationFrame 避免过度渲染
+        // 使用 requestAnimationFrame 优化性能
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId);
         }
@@ -129,16 +107,34 @@ document.querySelectorAll('.comparison-container').forEach(container => {
         });
     });
     
-    // 保留原有的点击拖动功能
+    // 鼠标离开时清理
+    container.addEventListener('mouseleave', () => {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+    });
+    
+    // 保留点击拖动功能
     container.addEventListener('mousedown', (e) => {
         handleInteraction(e);
+        
         const handleMouseMove = (moveEvent) => {
-            handleInteraction(moveEvent);
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            animationFrameId = requestAnimationFrame(() => {
+                handleInteraction(moveEvent);
+            });
         };
         
         const handleMouseUp = () => {
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
         };
         
         document.addEventListener('mousemove', handleMouseMove);
