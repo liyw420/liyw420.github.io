@@ -14,8 +14,6 @@ code: "https://github.com/liyw420/GC-4DGS"
 
 ---
 
-<img src="/static/image/Institution.jpg" alt="Institution" style="max-width: 100%; height: auto;">
-
 <div class="columns is-centered has-text-centered">
     <div class="column is-four-fifths">
         <h2>Demo Videos with Sparse Input Views</h2>
