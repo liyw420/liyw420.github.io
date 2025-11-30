@@ -4,7 +4,7 @@ permalink: /
 
 title: "Geometry-Consistent 4D Gaussian Splatting for Sparse-Input Dynamic View Synthesis"
 authors: "<a href='https://scholar.google.com/citations?user=RYUlClcAAAAJ&hl=en'>Yiwei Li</a><sup>†</sup>, <a href='https://www4.comp.polyu.edu.hk/~csjcao/'>Jiannong Cao</a><sup>†</sup>, <a href='https://pr-ryan.github.io/'>Penghui Ruan</a><sup>†‡</sup>, <a href='https://divvyasaxena.github.io/Divya-Saxena/'>Divya Saxena</a><sup>§</sup>, <a href='https://www.zhusongye.com/'>Songye Zhu</a><sup>†</sup>, <a href='https://cyfaaa.github.io/'>Yinfeng Cao</a><sup>†♯</sup>"
-affiliations: >
+affiliations: |
   <sup>†</sup>The Hong Kong Polytechnic University, Hong Kong, China<br>
   <sup>†‡</sup>Southern University of Science and Technology, Shenzhen, China<br>
   <sup>§</sup>Indian Institute of Technology, Jodhpur, India<br>
@@ -12,8 +12,9 @@ affiliations: >
 paper: "https://"
 code: "https://github.com/liyw420/GC-4DGS"
 
-<img src="/static/image/Institution.jpg" alt="Institution" style="max-width: 100%; height: auto;">
 ---
+
+<img src="/static/image/Institution.jpg" alt="Institution" style="max-width: 100%; height: auto;">
 
 <div class="columns is-centered has-text-centered">
     <div class="column is-four-fifths">
