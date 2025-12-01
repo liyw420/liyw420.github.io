@@ -9,7 +9,7 @@ affiliations: |
   <sup>†‡</sup>Southern University of Science and Technology, Shenzhen, China<br>
   <sup>§</sup>Indian Institute of Technology, Jodhpur, India<br>
   <sup>♯</sup>Institute of Cyberspace Technology, HKCT Institute of Higher Education, Hong Kong, China
-paper: "https://"
+paper: "https://arxiv.org/abs/2511.23044"
 code: "https://github.com/liyw420/GC-4DGS"
 
 ---
